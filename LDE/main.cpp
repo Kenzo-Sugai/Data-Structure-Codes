@@ -75,19 +75,21 @@ bool LDE::remove(int idx) {
   No *atual = primeiro;
   No *anterior = NULL;
   int index = 0;
-  while(atual->proximo != NULL && idx != index){
+  while(atual != NULL && idx != index){
     index++;
-    atual = atual->proximo;
     anterior = atual;
+    atual = atual->proximo;
   }
-  if(anterior == NULL){
-    primeiro = atual->proximo;
-    n--;
+  if(atual == NULL){
+    return false;
+  }
+  if(anterior != NULL){
+    anterior->proximo = atual->proximo;
   }
   else{
-    anterior->proximo = atual->proximo;
-    n--;
+    primeiro = atual->proximo;
   }
+  n--;
   atual = NULL;
   return true;
 }
@@ -96,11 +98,11 @@ int LDE::busca(int valor) {
   No *atual = primeiro;
   No *anterior = NULL;
   int index = 0;
-  while(atual->proximo != NULL){
+  while(atual != NULL){
     if(atual->valor == valor) return index;
     index++;
-    atual = atual->proximo;
     anterior = atual;
+    atual = atual->proximo;
   }
   return -1;
 }
