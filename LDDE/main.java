@@ -1,16 +1,9 @@
-package Main;
-
-/**
- * @author      : lopespt (lopespt@$HOSTNAME)
- * @file        : main
- * @created     : quarta set 01, 2021 21:38:51 -03
- */
-
 interface ILista{
-  public boolean insere(int valor);
-  public boolean remove(int idx);
-  public int busca(int valor);
-  public void imprime();
+  boolean insere(int valor);
+    boolean remove(int idx);
+    void imprime();
+    void imprimeReverso();
+    int busca(int valor);
 }
 
 class No {
@@ -20,188 +13,149 @@ class No {
 }
 
 class LDDE implements ILista {
-    public No primeiro = null;
-    
-    @Override
-    public boolean insere(int valor){
-        No novo = new No();
-        novo.valor = valor;
-        novo.anterior = null;
-        novo.proximo = null;
-        No atual = null;
-        No prox = primeiro;
-        No ultimo = null;
-        
-        while(atual != null && atual.proximo != null && atual.proximo.valor < valor){
-            atual = prox;
-            prox = prox.proximo;
-        }
-        
-        if(atual != null){
-            atual.proximo = novo;
-        } else {
-            primeiro = novo;
-        }
-        
-        novo.anterior = atual;
-        
-        novo.proximo = prox;
-        
-        if(prox != null)
-            prox.anterior = novo;
-        else
-            ultimo = novo;
-        
-        return true;
-    }
-    public boolean remove(int idx){
-      return false;
-    }
-    public int busca(int valor){
-      return 0;
-    }
-    public void imprime(){
-        No atual = primeiro;
-        while(atual != null){
-            System.out.println(atual.valor);
-            atual = atual.proximo;
-        }
-    }
-}
+  private No primeiro = null;
+  private No ultimo = null;
+  private int n = 0;
 
-class Lista implements ILista{
-  private int n;
-  private int capacity;
-  private int[] v;
-  public Lista(int capacity){
-    this.n = 0;
-    this.capacity = capacity;
-    this.v = new int[this.capacity];
+  public int getN() {
+      return n;
   }
 
-  public boolean insere(int valor){
-    if (this.capacity == this.n)
-      return false;
+  public void setN(int n) {
+      this.n = n;
+  }
 
-    this.v[this.n] = valor;
+  @Override
+  public boolean insere(int valor){
+    // instanciar o novo objeto na LDDE 
+    No novo = new No();
+    novo.valor = valor;
+    novo.proximo = null;
+    novo.anterior = null;
+
+    // apontadores para percorrer a LDDE
+    No anterior = null;
+    No atual = primeiro;
+
+    // percorrer a LDDE até encontrar o valor correto
+    while(atual != null && atual.valor < valor){
+      anterior = atual;
+      atual = atual.proximo;
+    }
+
+    // caso: anterior é null
+    if(anterior == null) primeiro = novo;
+    else anterior.proximo = novo;
+
+    novo.anterior = anterior; 
+
+    // caso: atual é null
+    if(atual == null) ultimo = novo;
+    else atual.anterior = novo;
+
+    novo.proximo = atual;
+
     this.n++;
-    return true;
-  }
-
-  public boolean remove(int idx){
-    if (idx < 0 || idx >= this.n){
-      return false;
-    }
     
-    for (int i = idx; i < this.n - 1; i++) {
-      v[i] = v[i+1];
-    }	
-    n--;
     return true;
   }
 
+  @Override
   public int busca(int valor){
-    for (int i = 0; i < n; i++) {
-      if(v[i] == valor)
-        return i;
+    No atual = primeiro;
+    int idx = 0;
+    while(atual != null && atual.valor < valor){
+      atual = atual.proximo;
+      idx++;
     }
-
-    return -1;
-  }
-
-  public void imprime(){
-    for (int i = 0; i < n; i++) {
-      System.out.println(v[i]);
-    }
-  }
-
-}
-
-class ListaOrdenada implements ILista{
-  private int[] v;
-  private int n;
-  private int capacidade;
-  ListaOrdenada(int capacidade){
-    this.capacidade = capacidade;
-    this.n = 0;
-    this.v = new int[capacidade];
-  }
-
-  public boolean insere(int valor){
-    if(this.capacidade == this.n){
-    	return false;
+    if(atual != null && atual.valor == valor){
+      return idx;
     }
     else{
-    	int i = 0;
-    	for(; this.v[i] <= valor && i < this.n; i++);
-    	
-    	for(int j = this.n - 1; j >= i; j--){
-    		this.v[j + 1] = this.v[j];
-    	}
-    	this.v[i] = valor;
-    	this.n++;
-    	
-    	return true;
+      return 0;
     }
-    
   }
+
+  @Override
   public boolean remove(int idx){
-	  if (idx < 0 || idx >= n){
-		  return false;
-	  }
-	  for(int i = idx; i < this.n - 1; i++){
-		  this.v[i] = this.v[i + 1];
-	  }
-	  this.n--;
-	  return true;
-    
-  }
-  public int busca(int valor){
-    int esq = 0;
-    int dir = n-1;
+    // apontadores para percorrer a LDDE
+    No anterior = null;
+    No atual = primeiro;
 
-    while (esq <= dir){
-      int pivo = (esq + dir)/2;
-      if (valor < v[pivo] ){
-        dir = pivo - 1;
-      }else if (valor > v[pivo]){
-        esq = pivo + 1;
-      }else{
-        return pivo;
-      }
+    int index = 0;
+
+    // percorrer a LDDE até encontrar o index correto    
+    while(atual != null && index != idx){
+      anterior = atual;
+      atual = atual.proximo;
+      index++;
     }
+
+    // caso: atual é null
+    if(atual == null) return false;
+
+    // caso: anterior é null
+    if(anterior == null) primeiro = atual.proximo;
+    else anterior.proximo = atual.proximo;
+
+    // caso: proximo é null
+    if(atual.proximo == null) ultimo = anterior;
+    else atual.proximo.anterior = anterior;
+
+    // apagar objeto (setar null)
+    atual = null;
+
+    this.n--;
+
+    return true;   
+  }
   
-    return -1;
-  }
-  public void imprime(){
-    for (int i = 0; i < n; i++) {
-      System.out.println(v[i]);
+  @Override
+  public void imprime() {
+    No atual = primeiro;
+    while(atual != null) {
+      System.out.println(atual.valor);
+      atual = atual.proximo;
     }
   }
-}
-public class JavaApplication1
-{
-    public static void testa(ILista lista){
-      System.out.println("Iniciando teste: ");
-        int v[] = {6,3,8,6,4,2,8,0,1};
 
-        for (int i : v) {
-          lista.insere(i);
-        }
-        lista.imprime();
-        System.out.println("======");
-        lista.remove(3);
-        lista.remove(0);
-        lista.remove(lista.busca(8));
-        lista.imprime();
-      System.out.println("Fim do teste: ");
+  @Override
+  public void imprimeReverso() {
+    No atual = ultimo;
+    while(atual != null) {
+      System.out.println(atual.valor);
+      atual = atual.anterior;
     }
-    public static void main(String args[])
-    {
-      testa(new Lista(10));
-      testa(new ListaOrdenada(10));
-      testa(new Lista(5));
-      testa(new ListaOrdenada(5));
-      testa(new LDDE);
+  }
+  
+}
+
+
+public class Main {
+    public static void imprime(ILista l, String titulo) {
+        System.out.println("==" + titulo + "==");
+        l.imprime();
+        System.out.println("=====Reverso====");
+        l.imprimeReverso();
+        System.out.println("======FIM=======");
+    }
+    public static void main(String[] args) {
+        ILista l = new LDDE();
+        l.insere(20);
+        l.insere(10);
+        l.insere(5);
+        l.insere(35);
+        l.insere(200);
+        imprime(l, "Após Inserções");
+
+        l.remove(3);
+        imprime(l, "Após Remove indice 3");
+
+        l.remove(l.busca(10));
+        imprime(l, "Após Remove número 10");
+
+        while(l.remove(0));
+
+        imprime(l, "Após Remover todos");
     }
 }
