@@ -44,6 +44,7 @@ bool Stack::push(int value){
   if(this->n + 1 == capacity) return false;
   this->v[n] = value;
   this->n++;
+  return true;
 }
 
 bool Stack::pop(){
