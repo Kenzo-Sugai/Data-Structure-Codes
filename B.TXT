@@ -1,0 +1,34 @@
+// C++ code
+//
+double luz = 0;
+int tempo_luz = 0;
+double total = 0;
+int cnt = 0;
+bool check = false;
+void setup()
+{
+  pinMode(A0, INPUT);
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  luz = analogRead(A0);
+  //Serial.println(luz);
+  if(luz < 500 and !check){
+   tempo_luz = millis();
+   check = true; 
+  } 
+  else if(luz >= 500 and check){
+    luz = millis() - tempo_luz;
+    luz /= 1000.0;
+    cnt++;
+    total += luz;
+    check = false;
+    char buf[255];
+    char fo[255], fo2[255];
+    sprintf(buf, "luz: %ss | total: %ss | loops: %d", dtostrf(luz, 1, 3, fo), dtostrf(total, 1, 3, fo2), cnt);
+    Serial.println(buf);
+  }
+  
+}
