@@ -1,45 +1,48 @@
-package hash_dinamic;
 import java.util.*;
-        
-public class Hash_dinamic {
-    
-    public static void test(ArrayList<Integer> A, ArrayList<Integer> B){
+
+class EntradaProb1{
+    public List<Integer> setA = new ArrayList<>();
+    public List<Integer> setB = new ArrayList<>();
+}
+
+public class Main {
+
+    public static boolean executa(EntradaProb1 p){
        Hashtable<Integer, Integer> hashA = new Hashtable<Integer, Integer>();
        Hashtable<Integer, Integer> hashB = new Hashtable<Integer, Integer>();
        
-       for(int i = 0; i < A.size(); i++){
-           if(hashA.get(A.get(i)) == null){
-               hashA.put(A.get(i), 0);
+       for(int i = 0; i < p.setA.size(); i++){
+           if(hashA.get(p.setA.get(i)) == null){
+               hashA.put(p.setA.get(i), 0);
            }
-           if(hashB.get(B.get(i)) == null){
-               hashB.put(B.get(i), 0);
+           if(hashB.get(p.setB.get(i)) == null){
+               hashB.put(p.setB.get(i), 0);
            }
            
-           hashA.put(A.get(i), hashA.get(A.get(i))+1);
-           hashB.put(B.get(i), hashB.get(B.get(i))+1);
+           hashA.put(p.setA.get(i), hashA.get(p.setA.get(i))+1);
+           hashB.put(p.setB.get(i), hashB.get(p.setB.get(i))+1);
        }
        
-       if(hashA.equals(hashB)) System.out.println("Verdadeiro");
-       else System.out.println("Falso");
-       
+       if(hashA.equals(hashB)) return true;
+       else return false;
     }
-    
+
     public static void main(String[] args) {
-        
-        ArrayList<Integer> A = new ArrayList<>();
-        ArrayList<Integer> B = new ArrayList<>();
-        A.add(2); A.add(5); A.add(6); A.add(8); A.add(10); A.add(2); A.add(2);
-        B.add(2); B.add(5); B.add(5); B.add(8); B.add(10); B.add(5); B.add(6);
-        test(A, B);
-        A.clear(); B.clear();
-        A.add(1); A.add(1); A.add(1); A.add(1); A.add(1); A.add(1); A.add(2);
-        B.add(1); B.add(1); B.add(1); B.add(2); B.add(1); B.add(1); B.add(1);
-        test(A, B);
-        
-       
-        
+        Scanner s = new Scanner(System.in);
+        int na = s.nextInt();
+        EntradaProb1 p = new EntradaProb1();
+        while(na > 0){
+            p.setA.add(s.nextInt());
+            na--;
+        }
+        int nb = s.nextInt();
+        while(nb > 0){
+            p.setB.add(s.nextInt());
+            nb--;
+        }
+        System.out.println(executa(p) ? "Verdadeiro" : "Falso");
     }
-    
-    
-    
+
+
+
 }
