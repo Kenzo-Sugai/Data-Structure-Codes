@@ -33,8 +33,8 @@ class AB {
 
             while(atual != NULL){
                 anterior = atual;
-                if(valor < atual->valor) atual = atual->esq;
-                else if(valor > atual->valor) atual = atual->dir;
+                if(valor < atual->valor) atual = anterior->esq;
+                else if(valor > atual->valor) atual = anterior->dir;
             }
 
             if(valor < anterior->valor) atual->esq = novo;
