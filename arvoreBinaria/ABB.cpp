@@ -37,8 +37,8 @@ class AB {
                 else if(valor > atual->valor) atual = anterior->dir;
             }
 
-            if(valor < anterior->valor) atual->esq = novo;
-            else if(valor > anterior->valor) atual->dir = novo;
+            if(valor < anterior->valor) anterior->esq = novo;
+            else if(valor > anterior->valor) anterior->dir = novo;
 
             return true;
 
