@@ -40,8 +40,8 @@ class ABB implements IABB {
         
         novo.valor = valor;
         
-        if(novo.valor > anterior.valor) atual.dir = novo;
-        else if(novo.valor < anterior.valor) atual.esq = novo;
+        if(novo.valor > anterior.valor) anterior.dir = novo;
+        else if(novo.valor < anterior.valor) anterior.esq = novo;
         
         return true;
     }
